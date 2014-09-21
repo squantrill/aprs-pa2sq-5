@@ -1,0 +1,7 @@
+# /etc/ax25/axports
+#
+# The format of this file is:
+#
+# name callsign speed paclen window description
+#
+sm0	PA2SQ-5		1200	255	2       VHF APRS (1200)	

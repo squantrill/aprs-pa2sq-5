@@ -1,0 +1,71 @@
+#! /bin/sh
+#
+# soundmodem Start Soundmodem driver.
+#
+# Author: Thomas Sailer, <sailer@ife.ee.ethz.ch>
+#
+ 
+### BEGIN INIT INFO
+# Provides: soundmodem
+# Required-Start: $remote_fs $syslog $named $network $time
+# Required-Stop: $remote_fs $syslog $named $network $time
+# Should-Start: $portmap
+# Should-Stop: $portmap
+# X-Start-Before: nis
+# X-Stop-After: nis
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# X-Interactive: true
+# Short-Description: Example initscript
+# Description: This file should be used to construct scripts to be
+# placed in /etc/init.d.
+### END INIT INFO
+ 
+# chkconfig: 345 50 50
+# description: This script starts/stops the Soundmodem driver
+# processname: soundmodem
+# pidfile: /var/run/soundmodem.pid
+ 
+# Source function library.
+. /lib/lsb/init-functions
+ 
+# Get config.
+#. /etc/sysconfig/network
+ 
+## Check that networking is up.
+#if [ ${NETWORKING} = "no" ]
+#then
+# exit 0
+#fi
+ 
+SOUNDMODEM=/usr/sbin/soundmodem
+ 
+[ -f $SOUNDMODEM ] || exit 0
+# See how we were called.
+case "$1" in
+start)
+echo -n "Starting Soundmodem: "
+$SOUNDMODEM --daemonize &>/dev/null
+sleep 5
+if [ $? -eq 0 ]; then
+echo "started."
+fi
+;;
+stop)
+echo -n "Stopping Soundmodem: "
+killall $SOUNDMODEM
+if [ $? -eq 0 ]; then
+echo "stopped."
+fi
+;;
+restart|reload)
+$0 stop
+sleep 1
+$0 start
+;;
+*)
+echo "Usage: soundmodem {start|stop|restart}"
+exit 1
+esac
+ 
+exit $RETVAL
